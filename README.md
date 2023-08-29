@@ -17,3 +17,12 @@ npm create vite@latest --registry=https://registry.npm.taobao.org
   cd vue3-demo
   npm install --registry=https://registry.npm.taobao.org
   npm run dev
+
+### install element-plus
+npm install element-plus --save --registry=https://registry.npm.taobao.org
+
+
+## todo
+
+内容布局
+https://www.bilibili.com/video/BV1sB4y1h7mZ/
