@@ -21,6 +21,8 @@ npm create vite@latest --registry=https://registry.npm.taobao.org
 ### install element-plus
 npm install element-plus --save --registry=https://registry.npm.taobao.org
 
+### install axios
+npm install axios --save --registry=https://registry.npm.taobao.org
 
 ## todo
 
