@@ -11,7 +11,9 @@
       </div>
       <!-- table zone  -->
 
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" style="width: 100%" border ref="multipleTableRef"
+        @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" />
         <el-table-column fixed prop="date" label="Date" width="150" />
         <el-table-column prop="name" label="Name" width="120" />
         <el-table-column prop="state" label="State" width="120" />
@@ -35,13 +37,17 @@ import { ref } from 'vue';
 
 // data
 let queryInput = ref("")
+let multipleSelection = ref([])
 
 // method
 const handleRowClick = () => {
   console.log('click')
 }
 
-
+const handleSelectionChange = (val) => {
+  multipleSelection.value = val
+  console.log(val)
+}
 
 const tableData = [
   {
@@ -93,6 +99,19 @@ const tableData = [
   left: 25%;
   transform: translateX(-25%, -25%);
 }
-/* https://www.bilibili.com/video/BV11e4y1Q7Xk  todo 6 布局优化
-*/
+
+.title {
+  text-align: center;
+}
+
+.query-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  /* margin-bottom: 20px; */
+}
+
+.el-input {
+  width: 200px;
+}
 </style>
