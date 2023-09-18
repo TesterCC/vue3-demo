@@ -13,7 +13,8 @@
       <el-table :data="tableData" style="width: 100%" border ref="multipleTableRef"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column fixed prop="date" label="Date" width="150" />
+        <!-- <el-table-column fixed prop="date" label="Date" width="150" /> -->
+        <el-table-column prop="date" label="Date" width="150" />
         <el-table-column prop="name" label="Name" width="120" />
         <el-table-column prop="state" label="State" width="120" />
         <el-table-column prop="city" label="City" width="120" />
@@ -79,6 +80,7 @@
 import { ref } from 'vue';
 
 // data
+// 用了$ref就不能用watch监听，如果要用监听，还是得用ref
 let queryInput = ref("")
 let multipleSelection = ref([])
 
@@ -98,41 +100,14 @@ let tableForm = ref({
 
 const tableData = [
   {
-    date: '2016-05-03',
+    id: "1",
     name: 'Tom',
     state: 'California',
     city: 'Los Angeles',
     address: 'No. 189, Grove St, Los Angeles',
     zip: 'CA 90036',
     tag: 'Home',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    tag: 'Office',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    tag: 'Home',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    tag: 'Office',
-  },
+  }
 ]
 
 
@@ -148,6 +123,7 @@ const handleSelectionChange = (val) => {
 
 const handleAdd = () => {
   dialogFormVisible.value = true
+  console.log(dialogFormVisible.value)
 }
 
 
