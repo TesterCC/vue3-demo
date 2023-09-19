@@ -14,15 +14,20 @@
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <!-- <el-table-column fixed prop="date" label="Date" width="150" /> -->
-        <el-table-column prop="date" label="Date" width="150" />
-        <el-table-column prop="name" label="Name" width="120" />
+        <!-- <el-table-column prop="date" label="Date" width="150" /> -->
+        <el-table-column prop="id" label="ID" width="80" />
+        <el-table-column prop="name" label="Name" width="100" />
+        <el-table-column prop="email" label="Email" width="120" />
+        <el-table-column prop="phone" label="Phone" width="120" />
         <el-table-column prop="state" label="State" width="120" />
-        <el-table-column prop="city" label="City" width="120" />
-        <el-table-column prop="address" label="Address" width="600" />
-        <el-table-column prop="zip" label="Zip" width="120" />
+        <!-- <el-table-column prop="address" label="Address" width="600" /> -->
+        <!-- 自动扩充 -->
+        <el-table-column prop="address" label="Address" />  
         <el-table-column fixed="right" label="Operations" width="120">
           <template #default>
-            <el-button link type="primary" size="small" @click="handleRowClick">Detail</el-button>
+            <!-- <el-button link type="primary" size="small" @click="handleRowClick">Detail</el-button> -->
+            <el-button link type="primary" size="small" @click="handleRowClick" style="color: #F56C6C;">Delete
+            </el-button>
             <el-button link type="primary" size="small">Edit</el-button>
           </template>
         </el-table-column>
@@ -101,12 +106,19 @@ let tableForm = ref({
 const tableData = [
   {
     id: "1",
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    tag: 'Home',
+    name: 'Bob',
+    email: "Bob@test.com",
+    phone: "13777777777",
+    state: "online",
+    address: "Guangdong, Shenzhen"
+  },
+  {
+    id: "2",
+    name: 'Alan',
+    email: "Alan@test.com",
+    phone: "13666777777",
+    state: "online",
+    address: "Zhejiang, Hangzhou"
   }
 ]
 
