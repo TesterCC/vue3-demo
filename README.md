@@ -27,6 +27,6 @@ npm install axios --save --registry=https://registry.npm.taobao.org
 ## todo
 
 ```
-11.multi-select delete
-https://www.bilibili.com/video/BV18F411P7M4
+12. edit
+https://www.bilibili.com/video/BV13B4y1h7CD
 ```

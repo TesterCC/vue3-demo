@@ -33,7 +33,7 @@
             <el-button link type="primary" size="small" @click="handleRowDel(scope.row)" style="color: #F56C6C;">
               Delete
             </el-button>
-            <el-button link type="primary" size="small">Edit</el-button>
+            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -138,7 +138,23 @@ let tableData = ref([
 ])
 
 
-// method    
+// method
+
+// Edit
+const handleEdit = (row) => {
+  // console.log(row)
+  dialogFormVisible.value = true
+  dialogType.value = 'edit'
+  console.log(dialogType.value)
+  // tableForm = { ...row }
+
+  this.tableForm.name = row.name;
+  this.tableForm.email = row.email;
+  this.tableForm.phone = row.phone;
+  this.tableForm.state = row.state;
+  this.tableForm.address = row.address;
+}
+
 // 删除这里只需要获取到id，不需要完整的row， 通过 {id}结构赋值获取id
 const handleRowDel = ({ id }) => {
   // 由于箭头函数没有自己的 arguments 对象和 this 值，因此无法直接使用 arguments.callee.name 获取当前函数的名称
@@ -180,20 +196,34 @@ const handleAdd = () => {
   dialogFormVisible.value = true
   // console.log(dialogFormVisible.value)
   tableForm.value = {}
+  dialogType.value = 'add'
 }
 
 
 
 const dialogConfirm = () => {
   dialogFormVisible.value = false
-  // 1. get front-end data
 
-  // 2. add data to table
-  tableData.value.push({
-    id: (tableData.value.length + 1).toString(),
-    ...tableForm.value
-  })
-  console.log(tableData.value)
+  // 0. check dialogType
+
+  if (dialogType.value === 'add') {
+    // 1. get front-end data
+    // 2. add data to table
+    tableData.value.push({
+      id: (tableData.value.length + 1).toString(),
+      ...tableForm.value
+    })
+  } else if (dialogType.value === 'edit') {
+    // 1. get current row index
+    let index = tableData.value.findIndex(item => item.id === tableForm.id)
+    console.log("[D] row index: " + index)
+    // 2. instead current row data
+    console.log("tableForm: " + tableForm)
+    console.log(tableData.value)
+    // fixme cannot update
+    tableData.value[index] = {tableForm}   
+  }
+  // console.log(tableData.value)
 }
 
 
