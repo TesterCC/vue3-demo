@@ -146,13 +146,15 @@ const handleEdit = (row) => {
   dialogFormVisible.value = true
   dialogType.value = 'edit'
   console.log(dialogType.value)
-  // tableForm = { ...row }
+  tableForm.value = { ...row }
+}
 
-  this.tableForm.name = row.name;
-  this.tableForm.email = row.email;
-  this.tableForm.phone = row.phone;
-  this.tableForm.state = row.state;
-  this.tableForm.address = row.address;
+// Add click button method
+const handleAdd = () => {
+  dialogFormVisible.value = true
+  // console.log(dialogFormVisible.value)
+  tableForm.value = {}
+  dialogType.value = 'add'
 }
 
 // 删除这里只需要获取到id，不需要完整的row， 通过 {id}结构赋值获取id
@@ -191,13 +193,7 @@ const handleDelList = () => {
 
 }
 
-// click button method
-const handleAdd = () => {
-  dialogFormVisible.value = true
-  // console.log(dialogFormVisible.value)
-  tableForm.value = {}
-  dialogType.value = 'add'
-}
+
 
 
 
@@ -215,13 +211,10 @@ const dialogConfirm = () => {
     })
   } else if (dialogType.value === 'edit') {
     // 1. get current row index
-    let index = tableData.value.findIndex(item => item.id === tableForm.id)
+    let index = tableData.value.findIndex(item => item.id === tableForm.value.id)
     console.log("[D] row index: " + index)
     // 2. instead current row data
-    console.log("tableForm: " + tableForm)
-    console.log(tableData.value)
-    // fixme cannot update
-    tableData.value[index] = {tableForm}   
+    tableData.value[index] = tableForm.value
   }
   // console.log(tableData.value)
 }
