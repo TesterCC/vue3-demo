@@ -20,9 +20,9 @@
         <el-table-column prop="email" label="Email" width="120" />
         <el-table-column prop="phone" label="Phone" width="120" />
         <el-table-column prop="state" label="State" width="120" />
-        <!-- <el-table-column prop="address" label="Address" width="600" /> -->
+        <el-table-column prop="address" label="Address" width="600" />
         <!-- 自动扩充 -->
-        <el-table-column prop="address" label="Address" />  
+        <!-- <el-table-column prop="address" label="Address" />   -->
         <el-table-column fixed="right" label="Operations" width="120">
           <template #default>
             <!-- <el-button link type="primary" size="small" @click="handleRowClick">Detail</el-button> -->
@@ -34,7 +34,7 @@
       </el-table>
 
       <!-- dialog zone -->
-      <el-dialog v-model="dialogTableVisible" title="Shipping address">
+      <el-dialog v-model="dialogTableVisible" title="add new item">
         <el-table :data="gridData">
           <el-table-column property="date" label="Date" width="150" />
           <el-table-column property="name" label="Name" width="200" />
@@ -44,7 +44,7 @@
 
       <!-- Form -->
 
-      <el-dialog v-model="dialogFormVisible" title="Shipping address">
+      <el-dialog v-model="dialogFormVisible" :title="dialogType === 'add' ? 'Add' : 'Edit'">
         <el-form :model="tableForm">
           <el-form-item label="Name" :label-width="formLabelWidth">
             <el-input v-model="tableForm.name" autocomplete="off" />
@@ -70,7 +70,8 @@
         <template #footer>
           <span class="dialog-footer">
             <!-- <el-button @click="dialogFormVisible = false">Cancel</el-button> -->
-            <el-button type="primary" @click="dialogFormVisible = false">
+            <!-- <el-button type="primary" @click="dialogFormVisible = false"> -->
+            <el-button type="primary" @click="dialogConfirm">
               Confirm
             </el-button>
           </span>
@@ -102,8 +103,9 @@ let tableForm = ref({
   address: "Guangdong, Shenzhen"
 })
 
+let dialogType = ref('add')
 
-const tableData = [
+let tableData = ref([
   {
     id: "1",
     name: 'Bob',
@@ -120,7 +122,7 @@ const tableData = [
     state: "online",
     address: "Zhejiang, Hangzhou"
   }
-]
+])
 
 
 // method
@@ -133,11 +135,24 @@ const handleSelectionChange = (val) => {
   console.log(val)
 }
 
+// click button method
 const handleAdd = () => {
   dialogFormVisible.value = true
-  console.log(dialogFormVisible.value)
+  // console.log(dialogFormVisible.value)
+  tableForm.value = {}
 }
 
+const dialogConfirm = () => {
+  dialogFormVisible.value = false
+  // 1. get front-end data
+
+  // 2. add data to table
+  tableData.value.push({
+    id: (tableData.value.length + 1).toString(),
+    ...tableForm.value
+  })
+  console.log(tableData.value)
+}
 
 
 </script>
