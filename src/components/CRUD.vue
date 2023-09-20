@@ -98,6 +98,9 @@ let multipleSelection = ref([])
 let dialogTableVisible = ref(false)
 let dialogFormVisible = ref(false)
 
+// increase id initial
+let counter = ref(3)
+
 let formLabelWidth = '80'
 
 let tableForm = ref({
@@ -205,8 +208,13 @@ const dialogConfirm = () => {
   if (dialogType.value === 'add') {
     // 1. get front-end data
     // 2. add data to table
+
+    // 2.5. counter update
+    counter.value += 1
+
     tableData.value.push({
-      id: (tableData.value.length + 1).toString(),
+      // id: (tableData.value.length + 1).toString(), // have some bug when delete
+      id: counter.value.toString(),
       ...tableForm.value
     })
   } else if (dialogType.value === 'edit') {
