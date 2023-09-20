@@ -7,7 +7,11 @@
       <!-- query zone -->
       <div class="query-box">
         <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" />
-        <el-button type="primary" @click="handleAdd">Add</el-button>
+        <div class="btn-list">
+          <el-button type="primary" @click="handleAdd">Add</el-button>
+          <el-button type="danger" @click="handleDelList" v-if="multipleSelection.length > 0">Multi Delete</el-button>
+        </div>
+
       </div>
       <!-- table zone  -->
       <el-table :data="tableData" style="width: 100%" border ref="multipleTableRef"
@@ -107,7 +111,7 @@ let tableForm = ref({
 let dialogType = ref('add')
 
 let tableData = ref([
-{
+  {
     id: "1",
     name: 'Alan',
     email: "Alan@test.com",
@@ -151,8 +155,24 @@ const handleRowDel = ({ id }) => {
 }
 
 const handleSelectionChange = (val) => {
-  multipleSelection.value = val
-  console.log(val)
+  // multipleSelection.value = val
+  // console.log(val)
+
+  multipleSelection.value = []
+  val.forEach(item => {
+    multipleSelection.value.push(item.id)
+  });
+  console.log(multipleSelection.value)
+}
+
+// click button to multi select delete
+const handleDelList = () => {
+  multipleSelection.value.forEach(id => {
+    // according id to delete item data
+    handleRowDel({ id })
+  })
+  multipleSelection.value = []
+
 }
 
 // click button method
@@ -161,6 +181,8 @@ const handleAdd = () => {
   // console.log(dialogFormVisible.value)
   tableForm.value = {}
 }
+
+
 
 const dialogConfirm = () => {
   dialogFormVisible.value = false
