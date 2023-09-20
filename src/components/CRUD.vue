@@ -6,7 +6,7 @@
       <h2>Simple CRUD Demo</h2>
       <!-- query zone -->
       <div class="query-box">
-        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" />
+        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" />
         <div class="btn-list">
           <el-button type="primary" @click="handleAdd">Add</el-button>
           <el-button type="danger" @click="handleDelList" v-if="multipleSelection.length > 0">Multi Delete</el-button>
@@ -142,6 +142,12 @@ let tableData = ref([
 
 
 // method
+
+// Search
+const handleQueryName = (val) => {
+  console.log(queryInput)
+  console.log(val)
+}
 
 // Edit
 const handleEdit = (row) => {
