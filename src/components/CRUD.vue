@@ -17,16 +17,17 @@
         <!-- <el-table-column prop="date" label="Date" width="150" /> -->
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="name" label="Name" width="100" />
-        <el-table-column prop="email" label="Email" width="120" />
+        <el-table-column prop="email" label="Email" width="130" />
         <el-table-column prop="phone" label="Phone" width="120" />
-        <el-table-column prop="state" label="State" width="120" />
+        <el-table-column prop="state" label="State" width="100" />
         <el-table-column prop="address" label="Address" width="600" />
         <!-- 自动扩充 -->
         <!-- <el-table-column prop="address" label="Address" />   -->
         <el-table-column fixed="right" label="Operations" width="120">
-          <template #default>
+          <template #default="scope">
             <!-- <el-button link type="primary" size="small" @click="handleRowClick">Detail</el-button> -->
-            <el-button link type="primary" size="small" @click="handleRowClick" style="color: #F56C6C;">Delete
+            <el-button link type="primary" size="small" @click="handleRowDel(scope.row)" style="color: #F56C6C;">
+              Delete
             </el-button>
             <el-button link type="primary" size="small">Edit</el-button>
           </template>
@@ -106,8 +107,16 @@ let tableForm = ref({
 let dialogType = ref('add')
 
 let tableData = ref([
-  {
+{
     id: "1",
+    name: 'Alan',
+    email: "Alan@test.com",
+    phone: "13666777777",
+    state: "online",
+    address: "Zhejiang, Hangzhou"
+  },
+  {
+    id: "2",
     name: 'Bob',
     email: "Bob@test.com",
     phone: "13777777777",
@@ -115,19 +124,30 @@ let tableData = ref([
     address: "Guangdong, Shenzhen"
   },
   {
-    id: "2",
-    name: 'Alan',
-    email: "Alan@test.com",
-    phone: "13666777777",
+    id: "3",
+    name: 'Chris',
+    email: "Chris@test.com",
+    phone: "15282223133",
     state: "online",
-    address: "Zhejiang, Hangzhou"
-  }
+    address: "Beijing"
+  },
 ])
 
 
-// method
-const handleRowClick = () => {
-  console.log('click')
+// method    
+// 删除这里只需要获取到id，不需要完整的row， 通过 {id}结构赋值获取id
+const handleRowDel = ({ id }) => {
+  // 由于箭头函数没有自己的 arguments 对象和 this 值，因此无法直接使用 arguments.callee.name 获取当前函数的名称
+  // console.log(handleRowDel.name)
+  // console.log(row)
+  console.log("[D] row id: " + id)
+
+  // 1. 通过id获取到条目对应的索引值
+  let index = tableData.value.findIndex(item => item.id === id)
+  console.log("[D] row index: " + index)
+
+  // 2. 通过索引值进行删除对应条目
+  tableData.value.splice(index, 1)
 }
 
 const handleSelectionChange = (val) => {
