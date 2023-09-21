@@ -6,6 +6,7 @@
       <h2>Simple CRUD Demo</h2>
       <!-- query zone -->
       <div class="query-box">
+<!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" @keydown.enter="enter" />-->
         <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" />
         <div class="btn-list">
           <el-button type="primary" @click="handleAdd">Add</el-button>
@@ -141,7 +142,17 @@ let tableData = ref([
   },
 ])
 
-let tableDataCopy = Object.assign(tableData)
+// bug use same data source
+// let tableDataCopy = Object.assign(tableData)
+let tableDataCopy = JSON.parse(JSON.stringify(tableData.value));
+
+/*
+Object.assign 方法执行的是浅拷贝操作，它会将 tableData 的引用复制给 tableDataCopy，而不是创建一个新的数组。这意味着 tableDataCopy 和 tableData 实际上指向了同一个数组对象。
+
+当你在 handleQueryName 函数中将 tableData.value 更新为过滤后的结果时，tableDataCopy.value 的值也会随之改变，因为它们指向同一个数组对象。因此，即使你清空了 queryInput 的输入内容，tableData.value 仍显示过滤后的结果，因为它们共享相同的数据源。
+
+如果你希望在清空 queryInput 时恢复原始的 tableData，你可以使用深拷贝而不是浅拷贝来复制 tableData。这样，tableDataCopy 将成为一个独立的数组对象，不会受到 tableData 的更改的影响。
+*/
 
 // method
 
@@ -154,9 +165,13 @@ const handleQueryName = (val) => {
   if (val.length > 0) {
     // tableData.value = tableData.value.filter(item => (item.name).toLocaleLowerCase().match(val))  // 大小写不敏感
     tableData.value = tableData.value.filter(item => item.name.match(val))
-  } else if (val === '') {
+  } else {
     // fixme: clear val cannot recover tableData
-    tableData = tableDataCopy
+    console.log("[Debug0] ", tableData)
+
+    tableData.value = tableDataCopy
+    console.log("[Debug1] ", tableDataCopy)
+
   }
 
 }
@@ -214,8 +229,10 @@ const handleDelList = () => {
 
 }
 
-
-
+// ext clear input with enter key
+let enter = () => {
+  queryInput.value = ""
+}
 
 
 const dialogConfirm = () => {
