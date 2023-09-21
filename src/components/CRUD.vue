@@ -91,6 +91,7 @@
 import { ref } from 'vue';
 
 // data
+
 // 用了$ref就不能用watch监听，如果要用监听，还是得用ref
 let queryInput = ref("")
 let multipleSelection = ref([])
@@ -140,13 +141,24 @@ let tableData = ref([
   },
 ])
 
+let tableDataCopy = Object.assign(tableData)
 
 // method
 
 // Search
 const handleQueryName = (val) => {
-  console.log(queryInput)
-  console.log(val)
+  // same
+  // console.log(queryInput.value)
+  // console.log(val) 
+
+  if (val.length > 0) {
+    // tableData.value = tableData.value.filter(item => (item.name).toLocaleLowerCase().match(val))  // 大小写不敏感
+    tableData.value = tableData.value.filter(item => item.name.match(val))
+  } else if (val === '') {
+    // fixme: clear val cannot recover tableData
+    tableData = tableDataCopy
+  }
+
 }
 
 // Edit

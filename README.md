@@ -24,9 +24,11 @@ npm install element-plus --save --registry=https://registry.npm.taobao.org
 ### install axios
 npm install axios --save --registry=https://registry.npm.taobao.org
 
-## todo
+### build
 
 ```
-13.search
-https://www.bilibili.com/video/BV1LU4y1q7NA/?p=13
+setting vite.config.js base: './',
+npm run build
+
+then use WebStorm open dist/index.html
 ```
