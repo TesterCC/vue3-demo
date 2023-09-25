@@ -10,8 +10,14 @@ export default defineConfig({
     //   reactivityTransform: true
     // }
   )],
-  // server: {
-  //   port: 8080 // 指定端口号
-  // },
+  server: {
+    // port: 8888, // 指定端口号
+    // config proxy info
+    proxy: {
+      '/user':{
+        target: "http://127.0.0.1:3001"
+      }
+    },
+  },
   base: './', // 打包相对路径
 })

@@ -32,3 +32,15 @@ npm run build
 
 then use WebStorm open dist/index.html
 ```
+
+### Todo
+
+```
+https://www.bilibili.com/video/BV17G411h7c9
+
+App.vue -> CRUD.vue
+
+CORS in Go
+
+https://element-plus.gitee.io/zh-CN/component/pagination.html
+```

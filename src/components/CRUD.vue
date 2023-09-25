@@ -20,7 +20,7 @@
         <el-table-column type="selection" width="55" />
         <!-- <el-table-column fixed prop="date" label="Date" width="150" /> -->
         <!-- <el-table-column prop="date" label="Date" width="150" /> -->
-        <el-table-column prop="id" label="ID" width="80" />
+        <el-table-column prop="ID" label="ID" width="80" />
         <el-table-column prop="name" label="Name" width="100" />
         <el-table-column prop="email" label="Email" width="130" />
         <el-table-column prop="phone" label="Phone" width="120" />
@@ -38,6 +38,15 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+          background
+          layout="prev, pager, next"
+          style="display: flex; justify-content: center; margin-top: 20px;"
+          :total="total"
+          v-model:current-page="curPage"
+          @current-change="handleChangePage"
+      />
 
       <!-- dialog zone -->
       <el-dialog v-model="dialogTableVisible" title="add new item">
@@ -85,13 +94,24 @@
       </el-dialog>
 
     </div>
+
+
   </div>
+
+
+
+
+
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import request from "/src/utils/request.js"
 
 // data
+
+let total = ref(10)
+let curPage = ref(1)
 
 // 用了$ref就不能用watch监听，如果要用监听，还是得用ref
 let queryInput = ref("")
@@ -155,6 +175,37 @@ Object.assign 方法执行的是浅拷贝操作，它会将 tableData 的引用�
 */
 
 // method
+
+const getTableData = async (cur = 1) => {
+  // http://localhost:3001/user/list?pageNum=3&pageSize=2
+  // baseURL 已有的部分不用再写
+  // let res = await request.get('/user/list', {
+  // after set proxy
+
+  // method 1 第一种请求方式 推荐
+  let res = await request.get('/list', {
+    pageSize: 10,
+    pageNum: cur
+  })
+
+  console.log(res);
+
+  // // method 2 第二种请求方式 不推荐
+  // let res = request.get(`/list/?pageSize=10&pageNum=${cur}`)
+  // console.log(res)
+
+  tableData.value = res.list
+  total.value = res.total
+  curPage.value = res.pageNum
+}
+getTableData()
+
+
+// 请求分页
+const handleChangePage = (val) =>{
+  getTableData(curPage.value)
+}
+
 
 // Search
 const handleQueryName = (val) => {
@@ -235,7 +286,7 @@ let enter = () => {
 }
 
 
-const dialogConfirm = () => {
+const dialogConfirm = async () => {
   dialogFormVisible.value = false
 
   // 0. check dialogType
@@ -244,14 +295,27 @@ const dialogConfirm = () => {
     // 1. get front-end data
     // 2. add data to table
 
-    // 2.5. counter update
-    counter.value += 1
+    // // 2.5. counter update
+    // counter.value += 1
+    //
+    // // just front-end add
+    // tableData.value.push({
+    //   // id: (tableData.value.length + 1).toString(), // have some bug when delete
+    //   id: counter.value.toString(),
+    //   ...tableForm.value
+    // })
 
-    tableData.value.push({
-      // id: (tableData.value.length + 1).toString(), // have some bug when delete
-      id: counter.value.toString(),
+    // add data to back-end api
+    let res = await request.post('/add', {
       ...tableForm.value
     })
+
+    // console.log(res)  // debug
+
+    // refresh page data
+    await getTableData(curPage.value)
+
+
   } else if (dialogType.value === 'edit') {
     // 1. get current row index
     let index = tableData.value.findIndex(item => item.id === tableForm.value.id)
