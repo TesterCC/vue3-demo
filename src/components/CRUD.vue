@@ -7,7 +7,10 @@
       <!-- query zone -->
       <div class="query-box">
 <!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" @keydown.enter="enter" />-->
-        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" />
+<!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" />-->
+<!--        use @change need user keydown enter-->
+        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @change="handleQueryName" />
+
         <div class="btn-list">
           <el-button type="primary" @click="handleAdd">Add</el-button>
           <el-button type="danger" @click="handleDelList" v-if="multipleSelection.length > 0">Multi Delete</el-button>
@@ -208,23 +211,30 @@ const handleChangePage = (val) =>{
 
 
 // Search
-const handleQueryName = (val) => {
+const handleQueryName = async (val) => {
   // same
   // console.log(queryInput.value)
   // console.log(val) 
 
+  // // just frontend, to request backend api is not recommend
+  // if (val.length > 0) {
+  //   // tableData.value = tableData.value.filter(item => (item.name).toLocaleLowerCase().match(val))  // 大小写不敏感
+  //   tableData.value = tableData.value.filter(item => item.name.match(val))
+  // } else {
+  //   // fixme: clear val cannot recover tableData
+  //   console.log("[Debug0] ", tableData)
+  //
+  //   tableData.value = tableDataCopy
+  //   console.log("[Debug1] ", tableDataCopy)
+  // }
+
+  console.log("[D] search keywords: ", val)
+
   if (val.length > 0) {
-    // tableData.value = tableData.value.filter(item => (item.name).toLocaleLowerCase().match(val))  // 大小写不敏感
-    tableData.value = tableData.value.filter(item => item.name.match(val))
+    tableData.value = await request.get(`/list/${val}`)
   } else {
-    // fixme: clear val cannot recover tableData
-    console.log("[Debug0] ", tableData)
-
-    tableData.value = tableDataCopy
-    console.log("[Debug1] ", tableDataCopy)
-
+    await getTableData(curPage)
   }
-
 }
 
 // Edit
