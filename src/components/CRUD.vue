@@ -245,18 +245,26 @@ const handleAdd = () => {
 }
 
 // 删除这里只需要获取到id，不需要完整的row， 通过 {id}结构赋值获取id
-const handleRowDel = ({ id }) => {
+const handleRowDel = async ({ ID }) => {
   // 由于箭头函数没有自己的 arguments 对象和 this 值，因此无法直接使用 arguments.callee.name 获取当前函数的名称
   // console.log(handleRowDel.name)
   // console.log(row)
-  console.log("[D] row id: " + id)
+  console.log("[D] row id: " + ID)
 
-  // 1. 通过id获取到条目对应的索引值
-  let index = tableData.value.findIndex(item => item.id === id)
-  console.log("[D] row index: " + index)
+  // // just operation in front-end
+  // // 1. 通过id获取到条目对应的索引值
+  // let index = tableData.value.findIndex(item => item.id === id)
+  // console.log("[D] row index: " + index)
+  //
+  // // 2. 通过索引值进行删除对应条目
+  // tableData.value.splice(index, 1)
 
-  // 2. 通过索引值进行删除对应条目
-  tableData.value.splice(index, 1)
+  let res = await request.delete(`/delete/${ID}`)
+
+  console.log(res); // for debug
+
+  await getTableData(curPage.value)
+
 }
 
 const handleSelectionChange = (val) => {
@@ -265,16 +273,16 @@ const handleSelectionChange = (val) => {
 
   multipleSelection.value = []
   val.forEach(item => {
-    multipleSelection.value.push(item.id)
+    multipleSelection.value.push(item.ID)
   });
   console.log(multipleSelection.value)
 }
 
 // click button to multi select delete
 const handleDelList = () => {
-  multipleSelection.value.forEach(id => {
+  multipleSelection.value.forEach(ID => {
     // according id to delete item data
-    handleRowDel({ id })
+    handleRowDel({ ID })
   })
   multipleSelection.value = []
 
