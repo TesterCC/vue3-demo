@@ -325,11 +325,24 @@ const dialogConfirm = async () => {
 
 
   } else if (dialogType.value === 'edit') {
-    // 1. get current row index
-    let index = tableData.value.findIndex(item => item.id === tableForm.value.id)
-    console.log("[D] row index: " + index)
-    // 2. instead current row data
-    tableData.value[index] = tableForm.value
+
+    // // just front-end operation
+    // // 1. get current row index
+    // let index = tableData.value.findIndex(item => item.id === tableForm.value.id)
+    // console.log("[D] row index: " + index)
+    // // 2. instead current row data
+    // tableData.value[index] = tableForm.value
+
+    // edit data put to back-end api
+    let res = await request.put(`/update/${tableForm.value.ID}`, {
+      ...tableForm.value
+    })
+
+    console.log(res)  // debug
+
+    // refresh current page data
+    await getTableData(curPage.value)
+
   }
   // console.log(tableData.value)
 }
