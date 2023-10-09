@@ -97,6 +97,9 @@
       </el-dialog>
 
     </div>
+    <div>
+      <el-button type="warning" @click="handleTestDownload">Test Download</el-button>
+    </div>
 
 
   </div>
@@ -109,6 +112,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import axios from "axios"
 import request from "/src/utils/request.js"
 
 // data
@@ -207,6 +211,50 @@ getTableData()
 // 请求分页
 const handleChangePage = (val) =>{
   getTableData(curPage.value)
+}
+
+
+// 直接用 axios 方法，没有封装
+const getDownloadFile = async () => {
+  // http://localhost:3001/user/download?id=7
+  // baseURL 已有的部分不用再写
+  try {
+        // 使用axios发送GET请求以下载文件
+        const response = await axios.get('/user/download?id=7', {
+          responseType: 'blob', // 设置响应类型为blob
+        });
+
+        // 从响应头中获取文件名
+        const contentDisposition = response.headers['content-disposition'];
+        // const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+        const filenameMatch = contentDisposition.match(/filename=(.+)/);
+        
+        console.log("[D] content-disposition: ", contentDisposition)
+        // console.log("[D] filenameMatch: ", filenameMatch)
+
+        if (filenameMatch && filenameMatch[1]) {
+          const filename = filenameMatch[1];
+          console.log("[D] filename: ", filename)
+
+          const blob = new Blob([response.data]);
+          const url = window.URL.createObjectURL(blob);
+
+          // 创建一个下载链接
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename; // 使用从响应头中获取的文件名
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        }
+      } catch (error) {
+        console.error('Error downloading file:', error);
+      }
+}
+
+// get download file
+const handleTestDownload = () =>{
+  getDownloadFile()
 }
 
 
