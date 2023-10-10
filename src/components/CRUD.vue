@@ -98,7 +98,8 @@
 
     </div>
     <div>
-      <el-button type="warning" @click="handleTestDownload">Test Download</el-button>
+      <el-button type="warning" @click="handleTestDownload">Test Download JSON</el-button>
+      <el-button type="warning" @click="handleTestDownload7z">Test Download 7z</el-button>
     </div>
 
 
@@ -119,6 +120,9 @@ import request from "/src/utils/request.js"
 
 let total = ref(10)
 let curPage = ref(1)
+
+// download type
+let downloadType = ref(0)
 
 // 用了$ref就不能用watch监听，如果要用监听，还是得用ref
 let queryInput = ref("")
@@ -215,12 +219,13 @@ const handleChangePage = (val) =>{
 
 
 // 直接用 axios 方法，没有封装
-const getDownloadFile = async () => {
+const getDownloadFile = async (val) => {
   // http://localhost:3001/user/download?id=7
   // baseURL 已有的部分不用再写
+  console.log("[D] Download Type: ", val)
   try {
         // 使用axios发送GET请求以下载文件
-        const response = await axios.get('/user/download?id=7', {
+        const response = await axios.get(`/user/download?id=${val}`, {
           responseType: 'blob', // 设置响应类型为blob
         });
 
@@ -252,9 +257,19 @@ const getDownloadFile = async () => {
       }
 }
 
+
+
+
 // get download file
 const handleTestDownload = () =>{
-  getDownloadFile()
+  downloadType.value = 1
+  getDownloadFile(downloadType.value)
+}
+
+
+const handleTestDownload7z = () =>{
+  downloadType.value = 7
+  getDownloadFile(downloadType.value)
 }
 
 
