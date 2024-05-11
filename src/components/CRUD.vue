@@ -143,26 +143,26 @@ import request from "/src/utils/request.js";
 
 // data
 
-let total = ref(10);
-let curPage = ref(1);
+let total = $ref(10);
+let curPage = $ref(1);
 
 // download type
-let downloadType = ref(0);
+let downloadType = $ref(0);
 
 // 用了$ref就不能用watch监听，如果要用监听，还是得用ref
 // 但一般还是推荐修改为用$ref，ref.value 使用起来不太方便
-let queryInput = ref("");
-let multipleSelection = ref([]);
+let queryInput = $ref("");
+let multipleSelection = $ref([]);
 
-let dialogTableVisible = ref(false);
-let dialogFormVisible = ref(false);
+let dialogTableVisible = $ref(false);
+let dialogFormVisible = $ref(false);
 
 // increase id initial
-let counter = ref(3);
+let counter = $ref(3);
 
 let formLabelWidth = "80";
 
-let tableForm = ref({
+let tableForm = $ref({
   name: "Bob",
   email: "Bob@test.com",
   phone: "13777777777",
@@ -170,9 +170,9 @@ let tableForm = ref({
   address: "Guangdong, Shenzhen",
 });
 
-let dialogType = ref("add");
+let dialogType = $ref("add");
 
-let tableData = ref([
+let tableData = $ref([
   {
     id: "1",
     name: "Alan",
@@ -201,7 +201,7 @@ let tableData = ref([
 
 // bug use same data source
 // let tableDataCopy = Object.assign(tableData)
-let tableDataCopy = JSON.parse(JSON.stringify(tableData.value));
+let tableDataCopy = JSON.parse(JSON.stringify(tableData));
 
 /*
 Object.assign 方法执行的是浅拷贝操作，它会将 tableData 的引用复制给 tableDataCopy，而不是创建一个新的数组。这意味着 tableDataCopy 和 tableData 实际上指向了同一个数组对象。
@@ -231,15 +231,15 @@ const getTableData = async (cur = 1) => {
   // let res = request.get(`/list/?pageSize=10&pageNum=${cur}`)
   // console.log(res)
 
-  tableData.value = res.list;
-  total.value = res.total;
-  curPage.value = res.pageNum;
+  tableData = res.list;
+  total = res.total;
+  curPage = res.pageNum;
 };
 getTableData();
 
 // 请求分页
 const handleChangePage = (val) => {
-  getTableData(curPage.value);
+  getTableData(curPage);
 };
 
 // 直接用 axios 方法，没有封装
@@ -283,37 +283,37 @@ const getDownloadFile = async (val) => {
 
 // get download file
 const handleTestDownload = () => {
-  downloadType.value = 1;
-  getDownloadFile(downloadType.value);
+  downloadType = 1;
+  getDownloadFile(downloadType);
 };
 
 const handleTestDownload7z = () => {
-  downloadType.value = 7;
-  getDownloadFile(downloadType.value);
+  downloadType = 7;
+  getDownloadFile(downloadType);
 };
 
 // Search
 const handleQueryName = async (val) => {
   // same
-  // console.log(queryInput.value)
+  // console.log(queryInput)
   // console.log(val)
 
   // // just frontend, to request backend api is not recommend
   // if (val.length > 0) {
-  //   // tableData.value = tableData.value.filter(item => (item.name).toLocaleLowerCase().match(val))  // 大小写不敏感
-  //   tableData.value = tableData.value.filter(item => item.name.match(val))
+  //   // tableData= tableData.filter(item => (item.name).toLocaleLowerCase().match(val))  // 大小写不敏感
+  //   tableData= tableData.filter(item => item.name.match(val))
   // } else {
   //   // fixme: clear val cannot recover tableData
   //   console.log("[Debug0] ", tableData)
   //
-  //   tableData.value = tableDataCopy
+  //   tableData= tableDataCopy
   //   console.log("[Debug1] ", tableDataCopy)
   // }
 
   console.log("[D] search keywords: ", val);
 
   if (val.length > 0) {
-    tableData.value = await request.get(`/list/${val}`);
+    tableData = await request.get(`/list/${val}`);
   } else {
     await getTableData(curPage);
   }
@@ -322,18 +322,18 @@ const handleQueryName = async (val) => {
 // Edit
 const handleEdit = (row) => {
   // console.log(row)
-  dialogFormVisible.value = true;
-  dialogType.value = "edit";
-  console.log(dialogType.value);
-  tableForm.value = { ...row };
+  dialogFormVisible = true;
+  dialogType = "edit";
+  console.log(dialogType);
+  tableForm = { ...row };
 };
 
 // Add click button method
 const handleAdd = () => {
-  dialogFormVisible.value = true;
-  // console.log(dialogFormVisible.value)
-  tableForm.value = {};
-  dialogType.value = "add";
+  dialogFormVisible = true;
+  // console.log(dialogFormVisible)
+  tableForm = {};
+  dialogType = "add";
 };
 
 // 删除这里只需要获取到id，不需要完整的row， 通过 {id}结构赋值获取id
@@ -345,50 +345,50 @@ const handleRowDel = async ({ ID }) => {
 
   // // just operation in front-end
   // // 1. 通过id获取到条目对应的索引值
-  // let index = tableData.value.findIndex(item => item.id === id)
+  // let index = tableData.findIndex(item => item.id === id)
   // console.log("[D] row index: " + index)
   //
   // // 2. 通过索引值进行删除对应条目
-  // tableData.value.splice(index, 1)
+  // tableData.splice(index, 1)
 
   let res = await request.delete(`/delete/${ID}`);
 
   console.log(res); // for debug
 
-  await getTableData(curPage.value);
+  await getTableData(curPage);
 };
 
 const handleSelectionChange = (val) => {
-  // multipleSelection.value = val
+  // multipleSelection= val
   // console.log(val)
 
-  multipleSelection.value = [];
+  multipleSelection = [];
   val.forEach((item) => {
-    multipleSelection.value.push(item.ID);
+    multipleSelection.push(item.ID);
   });
-  console.log(multipleSelection.value);
+  console.log(multipleSelection);
 };
 
 // click button to multi select delete
 const handleDelList = () => {
-  multipleSelection.value.forEach((ID) => {
+  multipleSelection.forEach((ID) => {
     // according id to delete item data
     handleRowDel({ ID });
   });
-  multipleSelection.value = [];
+  multipleSelection = [];
 };
 
 // ext clear input with enter key
 let enter = () => {
-  queryInput.value = "";
+  queryInput = "";
 };
 
 const dialogConfirm = async () => {
-  dialogFormVisible.value = false;
+  dialogFormVisible = false;
 
   // 0. check dialogType
 
-  if (dialogType.value === "add") {
+  if (dialogType === "add") {
     // 1. get front-end data
     // 2. add data to table
 
@@ -396,40 +396,40 @@ const dialogConfirm = async () => {
     // counter.value += 1
     //
     // // just front-end add
-    // tableData.value.push({
-    //   // id: (tableData.value.length + 1).toString(), // have some bug when delete
-    //   id: counter.value.toString(),
+    // tableData.push({
+    //   // id: (tableData.length + 1).toString(), // have some bug when delete
+    //   id: counter.toString(),
     //   ...tableForm.value
     // })
 
     // add data to back-end api
     let res = await request.post("/add", {
-      ...tableForm.value,
+      ...tableForm,
     });
 
     // console.log(res)  // debug
 
     // refresh page data
-    await getTableData(curPage.value);
-  } else if (dialogType.value === "edit") {
+    await getTableData(curPage);
+  } else if (dialogType === "edit") {
     // // just front-end operation
     // // 1. get current row index
-    // let index = tableData.value.findIndex(item => item.id === tableForm.value.id)
+    // let index = tableData.findIndex(item => item.id === tableForm.id)
     // console.log("[D] row index: " + index)
     // // 2. instead current row data
     // tableData.value[index] = tableForm.value
 
     // edit data put to back-end api
-    let res = await request.put(`/update/${tableForm.value.ID}`, {
-      ...tableForm.value,
+    let res = await request.put(`/update/${tableForm.ID}`, {
+      ...tableForm,
     });
 
     console.log(res); // debug
 
     // refresh current page data
-    await getTableData(curPage.value);
+    await getTableData(curPage);
   }
-  // console.log(tableData.value)
+  // console.log(tableData)
 };
 </script>
 

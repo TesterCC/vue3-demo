@@ -42,7 +42,7 @@ npm run build
 then use WebStorm open dist/index.html
 ```
 
-### Todo
+### REF
 
 ```
 CORS in front-end
@@ -61,12 +61,12 @@ https://www.bilibili.com/video/BV1od4y1S7qW
 
 ### Project
 
-front-end：Vue3.2 + Vite + Element-Plus
+frontend：Vue3.2 + Vite + Element-Plus
 
-back-end：GO + Gin + GORM + MySql
+backend：GO + Gin + GORM + MySql
 
 ### Course
 
-- [Vue3.2 + Vite + Element-Plus 实现最基础的 CRUD](https://www.bilibili.com/video/BV1yV4y177jC) -- front-end, still have some issue
+- [Vue3.2 + Vite + Element-Plus 实现最基础的 CRUD](https://www.bilibili.com/video/BV1yV4y177jC) -- front-end, finish
 - [GO + Gin + GORM + MySql 实现最基础的 CRUD](https://www.bilibili.com/video/BV1VV4y1E7Ks/) -- back-end, finish
-- [Vue3.2 + Go + Axios 数据联调](https://www.bilibili.com/video/BV17G411h7c9) -- todo, some coentent repeat
+- [Vue3.2 + Go + Axios 数据联调](https://www.bilibili.com/video/BV1Vr4y1j7yw) -- may already finish
