@@ -44,8 +44,10 @@ service.interceptors.response.use(res => {
 
 // request method
 function request(options){
+    // 没有传入就使用默认值 get
     options.method = options.method || 'get'
 
+    // attention syntax
     if(options.method.toLowerCase() === 'get') options.params = options.data
 
     return service(options)
@@ -53,6 +55,7 @@ function request(options){
 
 // request.get('/api',{xx:yy})
 ['get', 'post', 'put', 'delete'].forEach(item=>{
+    // request[item] = (url,data, options) => {
     request[item] = (url,data) => {
         return request({
             url,
