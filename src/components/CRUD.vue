@@ -6,20 +6,34 @@
       <h2>Simple CRUD Demo</h2>
       <!-- query zone -->
       <div class="query-box">
-<!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" @keydown.enter="enter" />-->
-<!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" />-->
-<!--        use @change need user keydown enter-->
-        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @change="handleQueryName" />
+        <!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" @keydown.enter="enter" />-->
+        <!--        <el-input class="query-input" v-model="queryInput" placeholder="Please input keywords" @input="handleQueryName" />-->
+        <!--        use @change need user keydown enter-->
+        <el-input
+          class="query-input"
+          v-model="queryInput"
+          placeholder="Please input keywords"
+          @change="handleQueryName"
+        />
 
         <div class="btn-list">
           <el-button type="primary" @click="handleAdd">Add</el-button>
-          <el-button type="danger" @click="handleDelList" v-if="multipleSelection.length > 0">Multi Delete</el-button>
+          <el-button
+            type="danger"
+            @click="handleDelList"
+            v-if="multipleSelection.length > 0"
+            >Multi Delete</el-button
+          >
         </div>
-
       </div>
       <!-- table zone  -->
-      <el-table :data="tableData" style="width: 100%" border ref="multipleTableRef"
-        @selection-change="handleSelectionChange">
+      <el-table
+        :data="tableData"
+        style="width: 100%"
+        border
+        ref="multipleTableRef"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55" />
         <!-- <el-table-column fixed prop="date" label="Date" width="150" /> -->
         <!-- <el-table-column prop="date" label="Date" width="150" /> -->
@@ -34,21 +48,33 @@
         <el-table-column fixed="right" label="Operations" width="120">
           <template #default="scope">
             <!-- <el-button link type="primary" size="small" @click="handleRowClick">Detail</el-button> -->
-            <el-button link type="primary" size="small" @click="handleRowDel(scope.row)" style="color: #F56C6C;">
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click="handleRowDel(scope.row)"
+              style="color: #f56c6c"
+            >
               Delete
             </el-button>
-            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">Edit</el-button>
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click="handleEdit(scope.row)"
+              >Edit</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
 
       <el-pagination
-          background
-          layout="prev, pager, next"
-          style="display: flex; justify-content: center; margin-top: 20px;"
-          :total="total"
-          v-model:current-page="curPage"
-          @current-change="handleChangePage"
+        background
+        layout="prev, pager, next"
+        style="display: flex; justify-content: center; margin-top: 20px"
+        :total="total"
+        v-model:current-page="curPage"
+        @current-change="handleChangePage"
       />
 
       <!-- dialog zone -->
@@ -62,7 +88,10 @@
 
       <!-- Form -->
 
-      <el-dialog v-model="dialogFormVisible" :title="dialogType === 'add' ? 'Add' : 'Edit'">
+      <el-dialog
+        v-model="dialogFormVisible"
+        :title="dialogType === 'add' ? 'Add' : 'Edit'"
+      >
         <el-form :model="tableForm">
           <el-form-item label="Name" :label-width="formLabelWidth">
             <el-input v-model="tableForm.name" autocomplete="off" />
@@ -95,83 +124,80 @@
           </span>
         </template>
       </el-dialog>
-
     </div>
     <div>
-      <el-button type="warning" @click="handleTestDownload">Test Download JSON</el-button>
-      <el-button type="warning" @click="handleTestDownload7z">Test Download 7z</el-button>
+      <el-button type="warning" @click="handleTestDownload"
+        >Test Download JSON</el-button
+      >
+      <el-button type="warning" @click="handleTestDownload7z"
+        >Test Download 7z</el-button
+      >
     </div>
-
-
   </div>
-
-
-
-
-
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import axios from "axios"
-import request from "/src/utils/request.js"
+import { ref } from "vue";
+import axios from "axios";
+import request from "/src/utils/request.js";
 
 // data
 
-let total = ref(10)
-let curPage = ref(1)
+let total = ref(10);
+let curPage = ref(1);
 
 // download type
-let downloadType = ref(0)
+let downloadType = ref(0);
 
 // 用了$ref就不能用watch监听，如果要用监听，还是得用ref
-let queryInput = ref("")
-let multipleSelection = ref([])
+// 但一般还是推荐修改为用$ref，ref.value 使用起来不太方便
+let queryInput = ref("");
+let multipleSelection = ref([]);
 
-let dialogTableVisible = ref(false)
-let dialogFormVisible = ref(false)
+let dialogTableVisible = ref(false);
+let dialogFormVisible = ref(false);
 
 // increase id initial
-let counter = ref(3)
+let counter = ref(3);
 
-let formLabelWidth = '80'
+let formLabelWidth = "80";
 
 let tableForm = ref({
   name: "Bob",
   email: "Bob@test.com",
   phone: "13777777777",
   state: "online",
-  address: "Guangdong, Shenzhen"
-})
+  address: "Guangdong, Shenzhen",
+});
 
-let dialogType = ref('add')
+let dialogType = ref("add");
 
 let tableData = ref([
   {
     id: "1",
-    name: 'Alan',
+    name: "Alan",
     email: "Alan@test.com",
     phone: "13666777777",
     state: "online",
-    address: "Zhejiang, Hangzhou"
+    address: "Zhejiang, Hangzhou",
   },
   {
     id: "2",
-    name: 'Bob',
+    name: "Bob",
     email: "Bob@test.com",
     phone: "13777777777",
     state: "online",
-    address: "Guangdong, Shenzhen"
+    address: "Guangdong, Shenzhen",
   },
   {
     id: "3",
-    name: 'Chris',
+    name: "Chris",
     email: "Chris@test.com",
     phone: "15282223133",
     state: "online",
-    address: "Beijing"
+    address: "Beijing",
   },
-])
+]);
 
 // bug use same data source
 // let tableDataCopy = Object.assign(tableData)
@@ -194,10 +220,10 @@ const getTableData = async (cur = 1) => {
   // after set proxy
 
   // method 1 第一种请求方式 推荐
-  let res = await request.get('/list', {
+  let res = await request.get("/list", {
     pageSize: 10,
-    pageNum: cur
-  })
+    pageNum: cur,
+  });
 
   console.log(res);
 
@@ -205,79 +231,72 @@ const getTableData = async (cur = 1) => {
   // let res = request.get(`/list/?pageSize=10&pageNum=${cur}`)
   // console.log(res)
 
-  tableData.value = res.list
-  total.value = res.total
-  curPage.value = res.pageNum
-}
-getTableData()
-
+  tableData.value = res.list;
+  total.value = res.total;
+  curPage.value = res.pageNum;
+};
+getTableData();
 
 // 请求分页
-const handleChangePage = (val) =>{
-  getTableData(curPage.value)
-}
-
+const handleChangePage = (val) => {
+  getTableData(curPage.value);
+};
 
 // 直接用 axios 方法，没有封装
 const getDownloadFile = async (val) => {
   // http://localhost:3001/user/download?id=7
   // baseURL 已有的部分不用再写
-  console.log("[D] Download Type: ", val)
+  console.log("[D] Download Type: ", val);
   try {
-        // 使用axios发送GET请求以下载文件
-        const response = await axios.get(`/user/download?id=${val}`, {
-          responseType: 'blob', // 设置响应类型为blob
-        });
+    // 使用axios发送GET请求以下载文件
+    const response = await axios.get(`/user/download?id=${val}`, {
+      responseType: "blob", // 设置响应类型为blob
+    });
 
-        // 从响应头中获取文件名
-        const contentDisposition = response.headers['content-disposition'];
-        // const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-        const filenameMatch = contentDisposition.match(/filename=(.+)/);
-        
-        console.log("[D] content-disposition: ", contentDisposition)
-        // console.log("[D] filenameMatch: ", filenameMatch)
+    // 从响应头中获取文件名
+    const contentDisposition = response.headers["content-disposition"];
+    // const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+    const filenameMatch = contentDisposition.match(/filename=(.+)/);
 
-        if (filenameMatch && filenameMatch[1]) {
-          const filename = filenameMatch[1];
-          console.log("[D] filename: ", filename)
+    console.log("[D] content-disposition: ", contentDisposition);
+    // console.log("[D] filenameMatch: ", filenameMatch)
 
-          const blob = new Blob([response.data]);
-          const url = window.URL.createObjectURL(blob);
+    if (filenameMatch && filenameMatch[1]) {
+      const filename = filenameMatch[1];
+      console.log("[D] filename: ", filename);
 
-          // 创建一个下载链接
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = filename; // 使用从响应头中获取的文件名
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-        }
-      } catch (error) {
-        console.error('Error downloading file:', error);
-      }
-}
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
 
-
-
+      // 创建一个下载链接
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename; // 使用从响应头中获取的文件名
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+  } catch (error) {
+    console.error("Error downloading file:", error);
+  }
+};
 
 // get download file
-const handleTestDownload = () =>{
-  downloadType.value = 1
-  getDownloadFile(downloadType.value)
-}
+const handleTestDownload = () => {
+  downloadType.value = 1;
+  getDownloadFile(downloadType.value);
+};
 
-
-const handleTestDownload7z = () =>{
-  downloadType.value = 7
-  getDownloadFile(downloadType.value)
-}
-
+const handleTestDownload7z = () => {
+  downloadType.value = 7;
+  getDownloadFile(downloadType.value);
+};
 
 // Search
 const handleQueryName = async (val) => {
   // same
   // console.log(queryInput.value)
-  // console.log(val) 
+  // console.log(val)
 
   // // just frontend, to request backend api is not recommend
   // if (val.length > 0) {
@@ -291,38 +310,38 @@ const handleQueryName = async (val) => {
   //   console.log("[Debug1] ", tableDataCopy)
   // }
 
-  console.log("[D] search keywords: ", val)
+  console.log("[D] search keywords: ", val);
 
   if (val.length > 0) {
-    tableData.value = await request.get(`/list/${val}`)
+    tableData.value = await request.get(`/list/${val}`);
   } else {
-    await getTableData(curPage)
+    await getTableData(curPage);
   }
-}
+};
 
 // Edit
 const handleEdit = (row) => {
   // console.log(row)
-  dialogFormVisible.value = true
-  dialogType.value = 'edit'
-  console.log(dialogType.value)
-  tableForm.value = { ...row }
-}
+  dialogFormVisible.value = true;
+  dialogType.value = "edit";
+  console.log(dialogType.value);
+  tableForm.value = { ...row };
+};
 
 // Add click button method
 const handleAdd = () => {
-  dialogFormVisible.value = true
+  dialogFormVisible.value = true;
   // console.log(dialogFormVisible.value)
-  tableForm.value = {}
-  dialogType.value = 'add'
-}
+  tableForm.value = {};
+  dialogType.value = "add";
+};
 
 // 删除这里只需要获取到id，不需要完整的row， 通过 {id}结构赋值获取id
 const handleRowDel = async ({ ID }) => {
   // 由于箭头函数没有自己的 arguments 对象和 this 值，因此无法直接使用 arguments.callee.name 获取当前函数的名称
   // console.log(handleRowDel.name)
   // console.log(row)
-  console.log("[D] row id: " + ID)
+  console.log("[D] row id: " + ID);
 
   // // just operation in front-end
   // // 1. 通过id获取到条目对应的索引值
@@ -332,47 +351,44 @@ const handleRowDel = async ({ ID }) => {
   // // 2. 通过索引值进行删除对应条目
   // tableData.value.splice(index, 1)
 
-  let res = await request.delete(`/delete/${ID}`)
+  let res = await request.delete(`/delete/${ID}`);
 
   console.log(res); // for debug
 
-  await getTableData(curPage.value)
-
-}
+  await getTableData(curPage.value);
+};
 
 const handleSelectionChange = (val) => {
   // multipleSelection.value = val
   // console.log(val)
 
-  multipleSelection.value = []
-  val.forEach(item => {
-    multipleSelection.value.push(item.ID)
+  multipleSelection.value = [];
+  val.forEach((item) => {
+    multipleSelection.value.push(item.ID);
   });
-  console.log(multipleSelection.value)
-}
+  console.log(multipleSelection.value);
+};
 
 // click button to multi select delete
 const handleDelList = () => {
-  multipleSelection.value.forEach(ID => {
+  multipleSelection.value.forEach((ID) => {
     // according id to delete item data
-    handleRowDel({ ID })
-  })
-  multipleSelection.value = []
-
-}
+    handleRowDel({ ID });
+  });
+  multipleSelection.value = [];
+};
 
 // ext clear input with enter key
 let enter = () => {
-  queryInput.value = ""
-}
-
+  queryInput.value = "";
+};
 
 const dialogConfirm = async () => {
-  dialogFormVisible.value = false
+  dialogFormVisible.value = false;
 
   // 0. check dialogType
 
-  if (dialogType.value === 'add') {
+  if (dialogType.value === "add") {
     // 1. get front-end data
     // 2. add data to table
 
@@ -387,18 +403,15 @@ const dialogConfirm = async () => {
     // })
 
     // add data to back-end api
-    let res = await request.post('/add', {
-      ...tableForm.value
-    })
+    let res = await request.post("/add", {
+      ...tableForm.value,
+    });
 
     // console.log(res)  // debug
 
     // refresh page data
-    await getTableData(curPage.value)
-
-
-  } else if (dialogType.value === 'edit') {
-
+    await getTableData(curPage.value);
+  } else if (dialogType.value === "edit") {
     // // just front-end operation
     // // 1. get current row index
     // let index = tableData.value.findIndex(item => item.id === tableForm.value.id)
@@ -408,19 +421,16 @@ const dialogConfirm = async () => {
 
     // edit data put to back-end api
     let res = await request.put(`/update/${tableForm.value.ID}`, {
-      ...tableForm.value
-    })
+      ...tableForm.value,
+    });
 
-    console.log(res)  // debug
+    console.log(res); // debug
 
     // refresh current page data
-    await getTableData(curPage.value)
-
+    await getTableData(curPage.value);
   }
   // console.log(tableData.value)
-}
-
-
+};
 </script>
 
 <style scoped>
@@ -436,7 +446,6 @@ const dialogConfirm = async () => {
   margin: 200px auto;
   width: 800px;
 }
-
 
 .title {
   text-align: center;
