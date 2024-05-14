@@ -132,6 +132,28 @@
       <el-button type="warning" @click="handleTestDownload7z"
         >Test Download 7z</el-button
       >
+
+      <!-- <el-button type="success" @click="handleUploadFile"
+        >Test Upload File</el-button
+      > -->
+
+      <hr />
+      <el-upload
+        class="upload-demo"
+        action="/user/upload"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="3"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+      >
+        <el-button size="small" type="primary">Test Upload File</el-button>
+        <div slot="tip" class="el-upload__tip">
+          &nbsp &nbsp just for test upload api
+        </div>
+      </el-upload>
     </div>
   </div>
 </template>

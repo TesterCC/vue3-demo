@@ -17,8 +17,8 @@ export default defineConfig({
     // config proxy info
     proxy: {
       '/user':{
-        // target: "http://127.0.0.1:3001",   // local dev debug
-        target: "http://192.168.80.129:3001"  // test
+        target: "http://127.0.0.1:3001",   // local dev debug
+        // target: "http://192.168.80.129:3001"  // test
       }
     },
   },
