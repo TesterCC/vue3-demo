@@ -15,7 +15,9 @@ export default defineConfig({
     // config proxy info
     proxy: {
       '/user':{
-        target: "http://127.0.0.1:3001"
+        target: "http://127.0.0.1:3001",   //后端接口地址
+        changeOrigin: true, // 允许跨域
+        // rewrite: (path) => path.replace(/^\/user/, ''), // 去掉 /user 前缀
       }
     },
   },

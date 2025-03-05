@@ -20,10 +20,17 @@
 import axios from "axios"
 import {ElMessage} from "element-plus"  // https://element-plus.gitee.io/zh-CN/component/message.html#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95
 
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+// debug print
+console.warn('current api base url:', apiBaseUrl)
+
+
 // global config
 const service = axios.create({
     // baseURL: "http://127.0.0.1:3001",  // 根路径, back-end server api
-    baseURL: "/user",  // 根路径, back-end server api
+    // baseURL: "/user",  // 根路径, back-end server api  // 使用代理前缀
+    baseURL: apiBaseUrl + "/user",
     timeout: 7000  // 请求超时时间
 })
 
